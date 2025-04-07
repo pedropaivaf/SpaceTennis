@@ -54,7 +54,7 @@ function Home() {
         </div>
 
         {/* Desktop - Grid */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {produtos.map((produto) => {
             const { ref, inView } = useInView({
               triggerOnce: true,
@@ -65,9 +65,8 @@ function Home() {
               <div key={produto.id} className="flex justify-center">
                 <div
                   ref={ref}
-                  className={`${
-                    inView ? "animate__animated animate__fadeInUp" : ""
-                  }`}
+                  className={`${inView ? "animate__animated animate__fadeInUp" : ""
+                    }`}
                 >
                   <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
                 </div>

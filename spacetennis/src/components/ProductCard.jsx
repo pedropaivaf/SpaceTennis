@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 function ProductCard({ produto, adicionarAoCarrinho }) {
   return (
     <div className="flex flex-col justify-between bg-gray-900 p-6 rounded-xl shadow-md hover:shadow-yellow-300 transition w-full h-[400px]">
-      <div className="w-full h-48 bg-gray-700 rounded mb-4 flex items-center justify-center overflow-hidden">
+      <div className="w-full h-56 bg-gray-700 rounded mb-4 flex items-center justify-center overflow-hidden">
         <span className="text-4xl">🎾</span>
       </div>
 

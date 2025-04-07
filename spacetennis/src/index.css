@@ -26,3 +26,8 @@ body {
   padding: 0;
   text-align: center;
 }
+
+/* Ajuste do espaçamento interno da grid */
+.grid {
+  gap: 2rem; /* Aumentando o gap dentro da grid */
+}
