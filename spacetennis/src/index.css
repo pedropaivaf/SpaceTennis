@@ -2,15 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Zera margens, padding e garante que o fundo ocupe 100% */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 html, body, #root {
-  height: 100%;
   width: 100%;
-  background-color: #000; /* pra remover fundo branco em volta */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  @apply bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white font-sans;
+}
+
+/* Remover redundância no #root */
+#root {
+  width: 100%; /* Garante que o conteúdo ocupe toda a largura disponível */
+  height: 100vh; /* Garante que a altura ocupe toda a tela */
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
