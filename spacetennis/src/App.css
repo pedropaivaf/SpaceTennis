@@ -36,31 +36,6 @@
   }
 }
 
-/* Ajustes no grid e nos cards para maior espaçamento */
-.hidden.md\:grid {
-  gap: 24px; /* Espaçamento uniforme entre os cards */
-  padding-left: 16px; /* Aumenta o espaçamento nas laterais */
-  padding-right: 16px;
-}
-
-/* Ajustes de espaçamento nos cards */
-.card, .product-card {
-  margin-bottom: 2rem; /* Ajuste no espaçamento entre os cards */
-  padding: 0; /* Remove padding do card */
-}
-
-/* Ajuste de espaçamento no container de produtos */
-#produtos {
-  margin-top: 2rem; /* Espaço entre o banner e a lista de produtos */
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-/* Ajuste do espaçamento interno da grid */
-.grid {
-  gap: 2rem; /* Aumentando o gap dentro da grid */
-}
-
 .read-the-docs {
   color: #888;
 }

@@ -1,12 +1,12 @@
 import "../App.css";
 import "../index.css";
 import { useContext } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { CarrinhoContext } from "../contexts/CartContext";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/ProductCard/ProductCard";
 import Header from "../components/Header";
 import { useInView } from "react-intersection-observer";
+import Footer from "../components/Footer"; // Importe o Footer
+
 
 function Home() {
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
@@ -42,19 +42,17 @@ function Home() {
           Produtos em destaque
         </h3>
 
-        {/* Mobile - Carrossel */}
-        <div className="block md:hidden">
-          <Swiper spaceBetween={16} slidesPerView={1} loop={true} autoplay={{ delay: 3000 }} pagination={{ clickable: true }}>
-            {produtos.map((produto) => (
-              <SwiperSlide key={produto.id}>
-                <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        {/* Mobile - Lista rolável */}
+        <div className="block md:hidden overflow-y-auto max-h-[80vh]">
+          {produtos.map((produto) => (
+            <div key={produto.id} className="mb-8">
+              <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
+            </div>
+          ))}
         </div>
 
         {/* Desktop - Grid */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {produtos.map((produto) => {
             const { ref, inView } = useInView({
               triggerOnce: true,
@@ -65,8 +63,7 @@ function Home() {
               <div key={produto.id} className="flex justify-center">
                 <div
                   ref={ref}
-                  className={`${inView ? "animate__animated animate__fadeInUp" : ""
-                    }`}
+                  className={`${inView ? "animate__animated animate__fadeInUp" : ""}`}
                 >
                   <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
                 </div>
@@ -76,11 +73,7 @@ function Home() {
         </div>
       </section>
 
-      <footer className="w-full text-center py-6 border-t border-gray-700 mt-12">
-        <p className="text-sm text-gray-500">
-          © 2025 SpaceTennis. Todos os direitos reservados.
-        </p>
-      </footer>
+      <Footer />  {/* Chamada para o Footer aqui */}
     </div>
   );
 }

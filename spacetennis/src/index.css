@@ -1,3 +1,5 @@
+/* index.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,16 +20,26 @@ body {
   @apply bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white font-sans;
 }
 
-/* Remover redundância no #root */
-#root {
-  width: 100%; /* Garante que o conteúdo ocupe toda a largura disponível */
-  height: 100vh; /* Garante que a altura ocupe toda a tela */
-  margin: 0;
-  padding: 0;
-  text-align: center;
+/* Ajuste da grid para diferentes tamanhos de tela */
+.grid {
+  display: grid;
+  gap: 2rem; /* Espaçamento entre os itens da grid */
 }
 
-/* Ajuste do espaçamento interno da grid */
-.grid {
-  gap: 2rem; /* Aumentando o gap dentro da grid */
+@media (min-width: 640px) { /* sm: tela pequena */
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* Exibe 2 colunas para telas pequenas */
+  }
+}
+
+@media (min-width: 768px) { /* md: tela média */
+  .grid {
+    grid-template-columns: repeat(3, 1fr); /* Exibe 3 colunas para telas médias */
+  }
+}
+
+@media (min-width: 1024px) { /* lg: tela grande */
+  .grid {
+    grid-template-columns: repeat(4, 1fr); /* Exibe 4 colunas para telas grandes */
+  }
 }

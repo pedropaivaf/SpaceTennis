@@ -1,0 +1,32 @@
+/* ProductCard.css */
+
+/* Ajustes para o ProductCard */
+.product-card {
+  width: 100%;         /* 100% de largura do container */
+  min-height: 350px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* Garante que o conteúdo fique organizado */
+}
+
+/* Configuração do container de produtos */
+#produtos {
+  display: flex;
+  flex-wrap: wrap;     /* Permite que os cards se ajustem em múltiplas linhas */
+  gap: 16px;           /* Espaçamento entre os cards */
+  justify-content: center;  /* Centraliza os cards */
+}
+  
+  /* Garantir que o título e descrição dos produtos não alterem o tamanho do card */
+  .product-card .text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .product-card .text-sm {
+    font-size: 0.875rem; /* Ajuste do tamanho da descrição */
+    line-height: 1.25rem;
+  }
+  
