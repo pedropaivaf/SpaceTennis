@@ -109,7 +109,7 @@ function Home() {
         </div>
 
         {/* Desktop - Grid */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 max-w-screen-lg mx-auto">
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 max-w-screen-lg mx-auto">
           {filteredProducts.map((produto) => {
             const { ref, inView } = useInView({
               triggerOnce: true,

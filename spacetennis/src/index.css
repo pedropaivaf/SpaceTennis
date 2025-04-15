@@ -26,20 +26,21 @@ body {
   gap: 2rem; /* Espaçamento entre os itens da grid */
 }
 
-@media (min-width: 640px) { /* sm: tela pequena */
+/* Ajuste da grid para ter no máximo 4 colunas */
+@media (min-width: 640px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr); /* Exibe 2 colunas para telas pequenas */
+    grid-template-columns: repeat(4, 1fr); /* Definir 4 colunas */
   }
 }
 
-@media (min-width: 768px) { /* md: tela média */
+@media (max-width: 640px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr); /* Exibe 3 colunas para telas médias */
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas em dispositivos menores */
   }
 }
 
-@media (min-width: 1024px) { /* lg: tela grande */
+@media (max-width: 480px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr); /* Exibe 4 colunas para telas grandes */
+    grid-template-columns: 1fr; /* 1 coluna em telas muito pequenas */
   }
 }
