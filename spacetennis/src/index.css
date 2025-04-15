@@ -1,5 +1,6 @@
 /* index.css */
 
+/* Ajuste geral de grid */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,21 +25,40 @@ body {
 .grid {
   display: grid;
   gap: 2rem; /* Espaçamento entre os itens da grid */
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas no máximo */
 }
 
-/* Ajuste da grid para ter no máximo 4 colunas */
-@media (min-width: 640px) {
+/* Responsividade para 3 colunas em telas de tablets */
+@media (max-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr); /* Definir 4 colunas */
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas em telas menores */
   }
 }
 
-@media (max-width: 640px) {
+/* 2 colunas para dispositivos móveis */
+@media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas em dispositivos menores */
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas em dispositivos móveis */
+  }
+
+  .filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .filter-container input,
+  .filter-container select {
+    width: 100%;
+  }
+
+  .filter-container .price-slider {
+    width: 100%;
   }
 }
 
+/* 1 coluna para telas muito pequenas */
 @media (max-width: 480px) {
   .grid {
     grid-template-columns: 1fr; /* 1 coluna em telas muito pequenas */

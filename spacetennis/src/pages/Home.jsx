@@ -2,16 +2,17 @@ import React, { useState, useContext } from "react";
 import { CarrinhoContext } from "../contexts/CartContext";
 import ProductCard from "../components/ProductCard/ProductCard";
 import { useInView } from "react-intersection-observer";
-import Header from "../components/Header"; // Caminho para o componente Header
-import Footer from "../components/Footer"; // Ajuste o caminho de acordo com a estrutura do seu projeto
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 500]); // Faixa de preço inicial
+  const [priceOrder, setPriceOrder] = useState("");
   const [freeShipping, setFreeShipping] = useState("");
+  const [maxPrice, setMaxPrice] = useState(500);
 
   const produtos = [
     { id: 1, nome: "Raquete Espacial", descricao: "Alta performance nas galáxias.", categoria: "raquete", preco: 100, freteGratis: true },
@@ -31,7 +32,7 @@ function Home() {
     return (
       (search ? produto.nome.toLowerCase().includes(search.toLowerCase()) : true) &&
       (category ? produto.categoria === category : true) &&
-      (priceRange[0] <= produto.preco && produto.preco <= priceRange[1]) &&
+      (priceOrder === "baixo" ? produto.preco <= maxPrice : priceOrder === "alto" ? produto.preco > maxPrice : true) &&
       (freeShipping ? produto.freteGratis === (freeShipping === "sim") : true)
     );
   });
@@ -55,43 +56,31 @@ function Home() {
         </h3>
 
         {/* Filtros e campo de pesquisa */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center filter-container">
           <div className="flex justify-center gap-6 mb-4">
             <input
               type="text"
               placeholder="Pesquisar por nome..."
-              className="p-2 bg-gray-800 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+              className="p-2 border border-gray-300 rounded"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <select
-              className="p-2 bg-gray-800 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              onChange={(e) => setCategory(e.target.value)}
-            >
+            <select className="p-2 border border-gray-300 rounded" onChange={(e) => setCategory(e.target.value)}>
               <option value="">Categoria</option>
               <option value="raquete">Raquete</option>
               <option value="bola">Bola</option>
               <option value="camiseta">Camiseta</option>
+              <option value="tenis">Tênis</option>
             </select>
-            <div className="w-64">
-              <label htmlFor="price-range" className="block text-sm mb-2">Preço (R$)</label>
-              <input
-                type="range"
-                id="price-range"
-                min="0"
-                max="500"
-                step="10"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([0, e.target.value])}
-                className="w-full bg-blue-500 rounded-md"
-              />
-              <div className="flex justify-between text-xs mt-1">
-                <span>Até R$ {priceRange[1]}</span>
-              </div>
-            </div>
-            <select
-              className="p-2 bg-gray-800 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              onChange={(e) => setFreeShipping(e.target.value)}
-            >
+            <input
+              type="range"
+              min="0"
+              max="500"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              className="range-slider"
+            />
+            <span className="text-white">Até R$ {maxPrice}</span>
+            <select className="p-2 border border-gray-300 rounded" onChange={(e) => setFreeShipping(e.target.value)}>
               <option value="">Frete</option>
               <option value="sim">Frete grátis</option>
               <option value="nao">Frete pago</option>
@@ -118,7 +107,10 @@ function Home() {
 
             return (
               <div key={produto.id} className="flex justify-center">
-                <div ref={ref} className={`${inView ? "animate__animated animate__fadeInUp" : ""}`}>
+                <div
+                  ref={ref}
+                  className={`${inView ? "animate__animated animate__fadeInUp" : ""}`}
+                >
                   <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
                 </div>
               </div>
