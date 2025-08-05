@@ -1,46 +1,64 @@
-import { Link } from 'react-router-dom'; // Importando o Link corretamente
-import './product-card.css'; // Importando o CSS do ProductCard
+import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { CarrinhoContext } from "../../contexts/CartContext";
+import { motion, AnimatePresence } from "framer-motion";
 
-function ProductCard({ produto, adicionarAoCarrinho }) {
+export default function ProductCard({ produto }) {
+  const { adicionarAoCarrinho } = useContext(CarrinhoContext);
+  const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+
+  const handleComprar = () => {
+    adicionarAoCarrinho({ ...produto, quantidade: 1 });
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000); // some após 2 segundos
+  };
+
+  const irParaProduto = () => {
+    navigate(`/produto/${produto.id}`);
+  };
+
   return (
-    <div className="product-card flex flex-col justify-between bg-gray-900 p-6 rounded-xl shadow-md hover:shadow-yellow-300 transition w-full">
-      <div className="w-full h-48 bg-gray-700 rounded mb-4 flex items-center justify-center overflow-hidden">
-        <span className="text-4xl">🎾</span>
+    <div className="relative bg-gray-800 text-white p-4 rounded-lg shadow-lg w-full max-w-xs flex flex-col justify-between">
+      <img
+        src="/racket-rocket.jpg"
+        alt={produto.nome}
+        className="w-full h-48 object-cover rounded mb-4"
+      />
+      <h4 className="text-lg font-semibold mb-1">{produto.nome}</h4>
+      <p className="text-yellow-300 font-semibold mb-2">
+        R$ {produto.preco.toFixed(2).replace('.', ',')}
+      </p>
+
+      <div className="flex gap-2">
+        <button
+          onClick={irParaProduto}
+          className="flex-1 bg-transparent border border-yellow-400 text-yellow-400 py-1 px-2 rounded hover:bg-yellow-400 hover:text-black transition"
+        >
+          Ver Produto
+        </button>
+        <button
+          onClick={handleComprar}
+          className="flex-1 bg-yellow-400 text-black py-1 px-2 rounded hover:bg-yellow-500 transition"
+        >
+          Comprar
+        </button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-between">
-        <div>
-          <h4 className="text-lg font-bold mb-1 text-ellipsis overflow-hidden">{produto.nome}</h4>
-          <p className="text-sm text-gray-400 mb-4">{produto.descricao}</p>
-        </div>
-
-        <div className="flex flex-col gap-2 mt-auto">
-          <Link to={`/produto/${produto.id}`} className="block w-full">
-            <button className="btn-loja w-full bg-yellow-300 text-black hover:bg-yellow-400">
-              Ver produto
-            </button>
-          </Link>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() =>
-                adicionarAoCarrinho({ id: produto.id, nome: produto.nome })
-              }
-              className="btn-loja flex-1 bg-green-500 text-white hover:bg-green-400"
-            >
-              Comprar
-            </button>
-            <input
-              type="number"
-              min={1}
-              defaultValue={1}
-              className="w-12 text-center bg-gray-800 border border-gray-600 rounded py-1"
-            />
-          </div>
-        </div>
-      </div>
+      {/* Toast de confirmação */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-black px-4 py-2 rounded shadow-lg text-sm font-semibold"
+          >
+            ✅ Adicionado ao carrinho!
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
-export default ProductCard;

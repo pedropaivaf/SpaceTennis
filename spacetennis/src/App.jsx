@@ -6,13 +6,15 @@ import ProductPage from './pages/ProductPage';
 
 function App() {
   return (
-    <div className="w-full h-full bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white font-sans">
+    <div className="flex flex-col min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white font-sans">
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/carrinho" element={<CartPage />} />
-          <Route path="/produto/:id" element={<ProductPage />} />
-        </Routes>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/carrinho" element={<CartPage />} />
+            <Route path="/produto/:id" element={<ProductPage />} />
+          </Routes>
+        </main>
       </Router>
     </div>
   );

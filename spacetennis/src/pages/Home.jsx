@@ -1,16 +1,30 @@
 import React, { useState, useContext } from "react";
 import { CarrinhoContext } from "../contexts/CartContext";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { useInView } from "react-intersection-observer";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useInView } from "react-intersection-observer";
+
+// Componente que aplica o efeito com useInView de forma isolada
+function ProductWrapper({ produto, adicionarAoCarrinho }) {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
+
+  return (
+    <div
+      ref={ref}
+      className={`flex justify-center ${inView ? "animate__animated animate__fadeInUp" : ""
+        }`}
+    >
+      <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
+    </div>
+  );
+}
 
 function Home() {
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [priceOrder, setPriceOrder] = useState("");
   const [freeShipping, setFreeShipping] = useState("");
   const [maxPrice, setMaxPrice] = useState(500);
 
@@ -27,21 +41,19 @@ function Home() {
     { id: 10, nome: "Raqueteira Galáctica", descricao: "Proteção e estilo para suas raquetes.", categoria: "raquete", preco: 180, freteGratis: false },
   ];
 
-  // Filtrando os produtos
   const filteredProducts = produtos.filter((produto) => {
-    return (
-      (search ? produto.nome.toLowerCase().includes(search.toLowerCase()) : true) &&
-      (category ? produto.categoria === category : true) &&
-      (priceOrder === "baixo" ? produto.preco <= maxPrice : priceOrder === "alto" ? produto.preco > maxPrice : true) &&
-      (freeShipping ? produto.freteGratis === (freeShipping === "sim") : true)
-    );
+    const matchSearch = produto?.nome?.toLowerCase().includes(search.toLowerCase());
+    const matchCategory = category ? produto.categoria === category : true;
+    const matchPrice = produto.preco <= Number(maxPrice);
+    const matchShipping = freeShipping === "" ? true : produto.freteGratis === (freeShipping === "sim");
+    return matchSearch && matchCategory && matchPrice && matchShipping;
   });
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white font-sans overflow-x-hidden">
       <Header />
 
-      <section className="w-full text-center py-16 px-8 bg-[url('/galaxy-bg.jpg')] bg-cover bg-center bg-no-repeat">
+      <section className="w-full text-center py-16 px-4 sm:px-8 bg-[url('/galaxy-bg.jpg')] bg-cover bg-center bg-no-repeat">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
           Explore o universo do tênis
         </h2>
@@ -50,37 +62,82 @@ function Home() {
         </p>
       </section>
 
-      <section id="produtos" className="w-full py-16 px-8">
+      {/* BENEFÍCIOS DA SPACE TENNIS */}
+      <div className="max-w-6xl mx-auto py-12 px-6 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center text-white">
+        <div>
+          <i className="fas fa-truck text-yellow-400 text-4xl mb-3"></i>
+          <h4 className="font-bold text-lg">Frete Rápido</h4>
+          <p className="text-sm text-gray-300">Entrega para todo o Brasil em até 48h.</p>
+        </div>
+        <div>
+          <i className="fas fa-shield-alt text-yellow-400 text-4xl mb-3"></i>
+          <h4 className="font-bold text-lg">Compra Segura</h4>
+          <p className="text-sm text-gray-300">Pagamento 100% protegido e criptografado.</p>
+        </div>
+        <div>
+          <i className="fas fa-star text-yellow-400 text-4xl mb-3"></i>
+          <h4 className="font-bold text-lg">Qualidade Garantida</h4>
+          <p className="text-sm text-gray-300">Produtos testados e aprovados por atletas.</p>
+        </div>
+      </div>
+
+      <section className="text-center mt-10">
+        <h2 className="text-3xl font-bold text-yellow-400 mb-2">Explore o universo do tênis</h2>
+        <p className="text-gray-300 mb-8">Eleve seu jogo ao infinito e além.</p>
+      </section>
+
+      {/* BANNER DE DESCONTO */}
+      <div className="bg-white text-black text-center py-4 px-6 rounded-lg mx-auto max-w-3xl font-semibold mb-12 shadow-md animate__animated animate__fadeInDown">
+        🎁 <span className="font-bold">Ganhe 10% de desconto</span> na sua primeira compra! Use o cupom <span className="font-bold text-lime-600">SPACESTART</span> no carrinho.
+      </div>
+
+      <section id="produtos" className="w-full py-16 px-4 sm:px-8">
         <h3 className="text-2xl font-semibold mb-8 text-center text-yellow-300">
           Nossos Produtos
         </h3>
 
-        {/* Filtros e campo de pesquisa */}
-        <div className="mb-8 text-center filter-container">
-          <div className="flex justify-center gap-6 mb-4">
+        {/* Filtros estilosos */}
+        <div className="mb-10">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 items-end">
+            {/* Campo de busca */}
             <input
               type="text"
               placeholder="Pesquisar por nome..."
-              className="p-2 border border-gray-300 rounded"
+              className="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <select className="p-2 border border-gray-300 rounded" onChange={(e) => setCategory(e.target.value)}>
+
+            {/* Categoria */}
+            <select
+              className="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option value="">Categoria</option>
               <option value="raquete">Raquete</option>
               <option value="bola">Bola</option>
               <option value="camiseta">Camiseta</option>
               <option value="tenis">Tênis</option>
+              <option value="kit">Kit</option>
             </select>
-            <input
-              type="range"
-              min="0"
-              max="500"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className="range-slider"
-            />
-            <span className="text-white">Até R$ {maxPrice}</span>
-            <select className="p-2 border border-gray-300 rounded" onChange={(e) => setFreeShipping(e.target.value)}>
+
+            {/* Preço */}
+            <div className="flex items-center gap-2 w-full max-w-xs">
+              <input
+                type="range"
+                min="0"
+                max="500"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="w-full accent-yellow-400"
+              />
+              <span className="text-yellow-300 text-sm">Até R$ {maxPrice}</span>
+            </div>
+
+            {/* Frete */}
+            <select
+              className="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              onChange={(e) => setFreeShipping(e.target.value)}
+            >
               <option value="">Frete</option>
               <option value="sim">Frete grátis</option>
               <option value="nao">Frete pago</option>
@@ -88,34 +145,15 @@ function Home() {
           </div>
         </div>
 
-        {/* Lista de Produtos */}
-        <div className="block md:hidden overflow-y-auto max-h-[80vh]">
+        {/* Produtos com animação */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((produto) => (
-            <div key={produto.id} className="mb-8">
-              <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
-            </div>
+            <ProductWrapper
+              key={produto.id}
+              produto={produto}
+              adicionarAoCarrinho={adicionarAoCarrinho}
+            />
           ))}
-        </div>
-
-        {/* Desktop - Grid */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 max-w-screen-lg mx-auto">
-          {filteredProducts.map((produto) => {
-            const { ref, inView } = useInView({
-              triggerOnce: true,
-              threshold: 0.5,
-            });
-
-            return (
-              <div key={produto.id} className="flex justify-center">
-                <div
-                  ref={ref}
-                  className={`${inView ? "animate__animated animate__fadeInUp" : ""}`}
-                >
-                  <ProductCard produto={produto} adicionarAoCarrinho={adicionarAoCarrinho} />
-                </div>
-              </div>
-            );
-          })}
         </div>
       </section>
 
